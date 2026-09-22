@@ -1,4 +1,4 @@
-import { Capacitor } from "@capacitor/core";
+﻿import { Capacitor } from "@capacitor/core";
 import { hexStringToUint8Array, uint8ArrayToHexString } from "../utils/bytes";
 
 const logHead = "[CAPACITOR DFU]";
@@ -58,7 +58,7 @@ class CapacitorDfu extends EventTarget {
         const serialNumber = device.serialNumber || device.deviceId;
         return {
             path: `usb_${serialNumber}`,
-            displayName: `Betaflight ${device.productName || "DFU Device"}`,
+            displayName: `ZimRobotics ${device.productName || "DFU Device"}`,
             vendorId: device.vendorId,
             productId: device.productId,
             manufacturerName: device.manufacturerName,

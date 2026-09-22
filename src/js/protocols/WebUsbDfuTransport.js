@@ -1,4 +1,4 @@
-import { usbDevices } from "./devices";
+﻿import { usbDevices } from "./devices";
 import UsbDfuDescriptors from "./UsbDfuDescriptors.js";
 
 /**
@@ -50,7 +50,7 @@ class WebUsbDfuTransport extends UsbDfuDescriptors {
         const identifier = device.serialNumber ?? `${device.vendorId}_${device.productId}`;
         return {
             path: `usb_${identifier}`,
-            displayName: `Betaflight ${device.productName}`,
+            displayName: `ZimRobotics ${device.productName}`,
             vendorId: device.vendorId,
             productId: device.productId,
             manufacturerName: device.manufacturerName,

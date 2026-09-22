@@ -1,5 +1,5 @@
 {
-  "appId": "com.betaflight.app.capacitor",
-  "appName": "Betaflight App",
+  "appId": "com.zimrobotics.app.capacitor",
+  "appName": "ZimRobotics",
   "webDir": "src/dist"
 }

@@ -1,4 +1,4 @@
-/*
+﻿/*
     STM32 F103 serial bus seems to properly initialize with quite a huge auto-baud range
     From 921600 down to 1200, i don't recommend getting any lower then that
     Official "specs" are from 115200 to 1200
@@ -975,7 +975,7 @@ class STM32Protocol {
 
                             // Show notification
                             if (getConfig("showNotifications").showNotifications) {
-                                NotificationManager.showNotification("Betaflight App", {
+                                NotificationManager.showNotification("ZimRobotics", {
                                     body: i18n.getMessage("programmingSuccessfulNotification"),
                                     icon: "/images/pwa/favicon.ico",
                                 });
@@ -993,7 +993,7 @@ class STM32Protocol {
 
                             // Show notification
                             if (getConfig("showNotifications").showNotifications) {
-                                NotificationManager.showNotification("Betaflight App", {
+                                NotificationManager.showNotification("ZimRobotics", {
                                     body: i18n.getMessage("programmingFailedNotification"),
                                     icon: "/images/pwa/favicon.ico",
                                 });

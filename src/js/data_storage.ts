@@ -41,7 +41,7 @@ const CONFIGURATOR: Configurator = reactive({
     virtualApiVersion: "0.0.1",
     cliActive: false,
     cliValid: false,
-    productName: "Betaflight App",
+    productName: "ZimRobotics",
     gitChangesetId: "unknown",
     version: "0.0.1",
     gitRevision: "norevision",

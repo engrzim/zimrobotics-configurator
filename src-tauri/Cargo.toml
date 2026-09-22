@@ -1,8 +1,8 @@
-[package]
+﻿[package]
 name = "betaflight-app"
 version = "2026.12.0"
-description = "Betaflight"
-authors = ["The Betaflight open source project."]
+description = "ZimRobotics"
+authors = ["ZimRobotics"]
 license = "GPL-3.0"
 repository = "https://github.com/betaflight/betaflight-configurator"
 edition = "2024"

@@ -1,4 +1,4 @@
-{
+﻿{
     "translation_version": {
         "message": "0"
     },
@@ -96,7 +96,7 @@
         "description": "Title of the notice shown once on a browser without Web Serial, Web Bluetooth or WebUSB."
     },
     "networkOnlyBrowserText": {
-        "message": "This browser can only reach a flight controller over the network, such as a Wi-Fi bridge, an ELRS module, or SITL. For USB or Bluetooth, use Chrome or Edge, or install the Betaflight App on your desktop. Missing here:",
+        "message": "This browser can only reach a flight controller over the network, such as a Wi-Fi bridge, an ELRS module, or SITL. For USB or Bluetooth, use Chrome or Edge, or install the ZimRobotics on your desktop. Missing here:",
         "description": "Body of the network-only browser notice, followed by the list of unavailable APIs."
     },
     "networkOnlyBrowserNoSerial": {
@@ -457,7 +457,7 @@
         "message": "Show update notifications for unstable versions of the app"
     },
     "configuratorUpdateNotice": {
-        "message": "You are using an outdated version of the <b>Betaflight App</b>.<br>$t(configuratorUpdateHelp.message)"
+        "message": "You are using an outdated version of the <b>ZimRobotics</b>.<br>$t(configuratorUpdateHelp.message)"
     },
     "configuratorUpdateHelp": {
         "message": "When internet is available, the app should automatically ask for available updates."
@@ -1049,7 +1049,7 @@
         "message": "EEPROM <span class=\"message-positive\">saved</span>"
     },
     "defaultWelcomeIntro": {
-        "message": "Welcome to the <strong>Betaflight App</strong>, a utility designed to simplify updating, configuring and tuning of your flight controller."
+        "message": "Welcome to the <strong>ZimRobotics</strong>, a utility designed to simplify updating, configuring and tuning of your flight controller."
     },
     "defaultHardwareHead": {
         "message": "Hardware"
@@ -1067,7 +1067,7 @@
         "message": "Contributing"
     },
     "defaultContributingText": {
-        "message": "If you would like to help make Betaflight even better you can help in many ways, including:<br /><ul><li>using your knowledge of Betaflight to create or update content on <a href=\"https://betaflight.com/docs/wiki\" target=\"_blank\" rel=\"noopener noreferrer\">our Wiki</a>, or answering other users' questions in online forums;</li><li><a href=\"https://betaflight.com/docs/development\" target=\"_blank\" rel=\"noopener noreferrer\">contributing code</a> to the firmware and app - new features, fixes, improvements;</li><li>testing <a href=\"https://github.com/Betaflight/betaflight/pulls\" target=\"_blank\" rel=\"noopener noreferrer\">new features and fixes</a> and providing feedback;</li><li>helping other users solve the problems they report in <a href=\"https://github.com/betaflight/betaflight/issues\" target=\"_blank\" rel=\"noopener noreferrer\">our issue tracker</a>, and participating in discussions on feature requests;</li><li><a href=\"https://github.com/betaflight/betaflight/blob/master/README.md#translators\" target=\"_blank\" rel=\"noopener noreferrer\">translating</a> Betaflight App into a new language, or helping to maintain the existing translations.</li></ul>"
+        "message": "If you would like to help make Betaflight even better you can help in many ways, including:<br /><ul><li>using your knowledge of Betaflight to create or update content on <a href=\"https://betaflight.com/docs/wiki\" target=\"_blank\" rel=\"noopener noreferrer\">our Wiki</a>, or answering other users' questions in online forums;</li><li><a href=\"https://betaflight.com/docs/development\" target=\"_blank\" rel=\"noopener noreferrer\">contributing code</a> to the firmware and app - new features, fixes, improvements;</li><li>testing <a href=\"https://github.com/Betaflight/betaflight/pulls\" target=\"_blank\" rel=\"noopener noreferrer\">new features and fixes</a> and providing feedback;</li><li>helping other users solve the problems they report in <a href=\"https://github.com/betaflight/betaflight/issues\" target=\"_blank\" rel=\"noopener noreferrer\">our issue tracker</a>, and participating in discussions on feature requests;</li><li><a href=\"https://github.com/betaflight/betaflight/blob/master/README.md#translators\" target=\"_blank\" rel=\"noopener noreferrer\">translating</a> ZimRobotics into a new language, or helping to maintain the existing translations.</li></ul>"
     },
     "defaultFacebookText": {
         "message": "We also have a <a href=\"https://www.facebook.com/groups/betaflightgroup/\" target=\"_blank\" rel=\"noopener noreferrer\">Facebook Group</a>.<br />Join us to get a place to talk about Betaflight, ask configuration questions, or just hang out with fellow pilots."
@@ -1085,7 +1085,7 @@
         "message": "Your Privacy"
     },
     "statisticsDisclaimer": {
-        "message": "This Betaflight App collects anonymous usage statistics. This usage data could include the number of launches, geographical region of the users, types of flight controllers, firmware versions, usage of UI elements and tabs, etc. We collect this data in order to better understand how the App is being used and community trends. We do this to help us develop an improved UI and overall experience. Users can opt-out of data collection in the Options tab. For information about how we collect and use your data, please see our <a href=\"https://www.betaflight.com/privacy\" rel=\"noopener noreferrer\" target=\"_blank\">privacy policy</a>."
+        "message": "This ZimRobotics collects anonymous usage statistics. This usage data could include the number of launches, geographical region of the users, types of flight controllers, firmware versions, usage of UI elements and tabs, etc. We collect this data in order to better understand how the App is being used and community trends. We do this to help us develop an improved UI and overall experience. Users can opt-out of data collection in the Options tab. For information about how we collect and use your data, please see our <a href=\"https://www.betaflight.com/privacy\" rel=\"noopener noreferrer\" target=\"_blank\">privacy policy</a>."
     },
     "defaultButtonFirmwareFlasher": {
         "message": "Firmware Flasher"
@@ -1410,7 +1410,7 @@
         "description": "Message that pops up to describe the BST arming disable flag"
     },
     "initialSetupArmingDisableFlagsTooltipMSP": {
-        "message": "MSP connection is active, likely with the Betaflight App",
+        "message": "MSP connection is active, likely with the ZimRobotics",
         "description": "Message that pops up to describe the MSP arming disable flag"
     },
     "initialSetupArmingDisableFlagsTooltipPARALYZE": {
@@ -4640,7 +4640,7 @@
         "message": "Select or detect your board to see available online firmware releases - Select the correct firmware appropriate for your board."
     },
     "firmwareFlasherOnlineSelectBoardHint": {
-        "message": "Betaflight App supports flashing of Unified Targets with the respective board specific configurations in one step.<br><br>The concept of Unified Targets means that the same firmware .hex file can be used for all boards using the same MCU.<br><br>Betaflight 4.4 introduces <strong>Cloud Build</strong><br><br>With <strong>Cloud Build</strong> we need to define hardware options present on your build.<br><br>To make the different boards work with the same firmware, a specific configuration file is deployed alongside the firmware when a Unified Target is flashed.<br><br>With Local build you can load a unified target configuration file or chose a board before loading a firmware .hex file.<br><br>If you encounter problems using the firmware, please consider joining Discord or open an <a href=\"https://github.com/betaflight/betaflight/issues\" target=\"_blank\" rel=\"noopener noreferrer\">issue</a>."
+        "message": "ZimRobotics supports flashing of Unified Targets with the respective board specific configurations in one step.<br><br>The concept of Unified Targets means that the same firmware .hex file can be used for all boards using the same MCU.<br><br>Betaflight 4.4 introduces <strong>Cloud Build</strong><br><br>With <strong>Cloud Build</strong> we need to define hardware options present on your build.<br><br>To make the different boards work with the same firmware, a specific configuration file is deployed alongside the firmware when a Unified Target is flashed.<br><br>With Local build you can load a unified target configuration file or chose a board before loading a firmware .hex file.<br><br>If you encounter problems using the firmware, please consider joining Discord or open an <a href=\"https://github.com/betaflight/betaflight/issues\" target=\"_blank\" rel=\"noopener noreferrer\">issue</a>."
     },
     "firmwareFlasherOnlineSelectFirmwareVersionDescription": {
         "message": "Select firmware version for your board."
@@ -8781,7 +8781,7 @@
         "message": "Incompatible webview"
     },
     "cordovaWebviewTroubleshootingMsg": {
-        "message": "You must update your device's webview in order to use the Betaflight App."
+        "message": "You must update your device's webview in order to use the ZimRobotics."
     },
     "cordovaWebviewTroubleshootingMsg2": {
         "message": "The tool below is intended to help you to install a new webview or to update an already installed webview."

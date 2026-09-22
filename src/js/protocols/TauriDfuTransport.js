@@ -1,4 +1,4 @@
-import { invoke } from "@tauri-apps/api/core";
+﻿import { invoke } from "@tauri-apps/api/core";
 import { usbDevices } from "./devices";
 import UsbDfuDescriptors from "./UsbDfuDescriptors.js";
 
@@ -56,7 +56,7 @@ class TauriDfuTransport extends UsbDfuDescriptors {
         const identifier = device.serialNumber || device.deviceName;
         return {
             path: `usb_${identifier}`,
-            displayName: `Betaflight ${device.productName || "DFU Device"}`,
+            displayName: `ZimRobotics ${device.productName || "DFU Device"}`,
             vendorId: device.vendorId,
             productId: device.productId,
             manufacturerName: device.manufacturerName,

@@ -1,4 +1,4 @@
-<template>
+﻿<template>
     <BaseTab tab-name="onboard_logging">
         <div
             class="tab-onboard_logging"
@@ -612,7 +612,7 @@ export default defineComponent({
                     getConfig("showNotifications").showNotifications &&
                     NotificationManager.checkPermission() === "granted"
                 ) {
-                    NotificationManager.showNotification("Betaflight App", {
+                    NotificationManager.showNotification("ZimRobotics", {
                         body: i18n.getMessage("flashEraseDoneNotification"),
                         icon: "/images/pwa/favicon.ico",
                     });
@@ -730,7 +730,7 @@ export default defineComponent({
             }
 
             if (getConfig("showNotifications").showNotifications) {
-                NotificationManager.showNotification("Betaflight App", {
+                NotificationManager.showNotification("ZimRobotics", {
                     body: i18n.getMessage("flashDownloadDoneNotification"),
                     icon: "/images/pwa/favicon.ico",
                 });

@@ -1,8 +1,8 @@
 {
-  "name": "betaflight-app",
-  "productName": "Betaflight",
-  "displayName": "Betaflight - Configuration and management application",
-  "description": "Crossplatform configuration and management application for the Betaflight flight control firmware.",
+  "name": "zimrobotics-app",
+  "productName": "ZimRobotics",
+  "displayName": "ZimRobotics - Configuration and management application",
+  "description": "Crossplatform configuration and management application for ZimRobotics flight control firmware.",
   "version": "2026.12.0-alpha",
   "type": "module",
   "main": "index.html",
@@ -40,13 +40,13 @@
     "id": "main-window",
     "min_width": 1024,
     "min_height": 550,
-    "title": "Betaflight App"
+    "title": "ZimRobotics"
   },
   "repository": {
     "type": "git",
     "url": "github.com/betaflight/betaflight-configurator"
   },
-  "author": "The Betaflight open source project.",
+  "author": "ZimRobotics",
   "license": "GPL-3.0",
   "engines": {
     "node": "^24.21.0",
@@ -133,5 +133,9 @@
     "workbox-build": {
       "glob": "^13.0.6"
     }
+  },
+  "allowScripts": {
+    "esbuild@0.27.7": true,
+    "vue-demi@0.14.10": true
   }
 }
