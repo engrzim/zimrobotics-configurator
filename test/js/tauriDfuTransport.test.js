@@ -76,7 +76,7 @@ describe("TauriDfuTransport enumeration", () => {
 
         expect(ports).toHaveLength(1);
         expect(ports[0].path).toBe("usb_STM32SERIAL");
-        expect(ports[0].displayName).toBe("Betaflight STM32 BOOTLOADER");
+        expect(ports[0].displayName).toBe("ZimRobotics STM32 BOOTLOADER");
         expect(ports[0].vendorId).toBe(1155);
         expect(ports[0].port.deviceName).toBe("/dev/bus/usb/001/002");
     });

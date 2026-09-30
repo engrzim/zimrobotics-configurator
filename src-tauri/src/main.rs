@@ -4,5 +4,5 @@
 )]
 
 fn main() {
-    betaflight_app_lib::run()
+    zimrobotics_app_lib::run()
 }

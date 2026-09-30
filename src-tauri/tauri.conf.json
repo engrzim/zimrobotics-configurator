@@ -41,8 +41,9 @@
             "nsis"
         ],
         "icon": [
-            "icons/bf_icon_128.png",
-            "icons/icon.ico"
+            "icons/zimrobotics_icon_128.png",
+            "icons/zimrobotics_icon.ico",
+            "icons/zimrobotics_icon.icns"
         ],
         "category": "Utility",
         "copyright": "ZimRobotics.",

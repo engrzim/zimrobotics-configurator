@@ -9,12 +9,12 @@
             <UserSession is-compact class="floating-account" />
             <div id="tab-content-container" :class="{ 'has-mobile-topbar': isLandingTab }">
                 <div class="tab_container" :class="{ reveal: isMobileSidebarOpen }">
-                    <betaflight-logo
+                    <zimrobotics-logo
                         :configurator-version="CONFIGURATOR.getDisplayVersion()"
                         :firmware-version="FC.CONFIG.flightControllerVersion"
                         :firmware-id="FC.CONFIG.flightControllerIdentifier"
                         :hardware-id="FC.CONFIG.hardwareName"
-                    ></betaflight-logo>
+                    ></zimrobotics-logo>
                     <Teleport to=".floating-connect" :disabled="!useFloatingChrome">
                         <ConnectButton />
                     </Teleport>

@@ -1,4 +1,4 @@
-﻿{
+{
     "translation_version": {
         "message": "0"
     },
@@ -1061,22 +1061,22 @@
         "message": "Software"
     },
     "defaultSoftwareText": {
-        "message": "Our Blackbox log viewer is built into this app. Open the <strong>Blackbox Viewer</strong> tab to analyse your flight logs.<br /><br />Our collection of <a href=\"https://github.com/betaflight/betaflight-tx-lua-scripts/releases\" target=\"_blank\" rel=\"noopener noreferrer\">TX Lua Scripts</a> are available on GitHub.<br /><br />Our <a href=\"https://github.com/betaflight\" target=\"_blank\" rel=\"noopener noreferrer\">source code</a> for the firmware and this app can be downloaded from GitHub."
+        "message": "The Blackbox log viewer is built into ZimRobotics. Open the <strong>Blackbox Viewer</strong> tab to analyse your flight logs.<br /><br />Download the <a href=\"https://github.com/engrzim/zimrobotics-configurator/releases\" target=\"_blank\" rel=\"noopener noreferrer\">latest ZimRobotics releases</a> or review the <a href=\"https://github.com/engrzim/zimrobotics-configurator\" target=\"_blank\" rel=\"noopener noreferrer\">source code</a> on GitHub."
     },
     "defaultContributingHead": {
         "message": "Contributing"
     },
     "defaultContributingText": {
-        "message": "If you would like to help make Betaflight even better you can help in many ways, including:<br /><ul><li>using your knowledge of Betaflight to create or update content on <a href=\"https://betaflight.com/docs/wiki\" target=\"_blank\" rel=\"noopener noreferrer\">our Wiki</a>, or answering other users' questions in online forums;</li><li><a href=\"https://betaflight.com/docs/development\" target=\"_blank\" rel=\"noopener noreferrer\">contributing code</a> to the firmware and app - new features, fixes, improvements;</li><li>testing <a href=\"https://github.com/Betaflight/betaflight/pulls\" target=\"_blank\" rel=\"noopener noreferrer\">new features and fixes</a> and providing feedback;</li><li>helping other users solve the problems they report in <a href=\"https://github.com/betaflight/betaflight/issues\" target=\"_blank\" rel=\"noopener noreferrer\">our issue tracker</a>, and participating in discussions on feature requests;</li><li><a href=\"https://github.com/betaflight/betaflight/blob/master/README.md#translators\" target=\"_blank\" rel=\"noopener noreferrer\">translating</a> ZimRobotics into a new language, or helping to maintain the existing translations.</li></ul>"
+        "message": "Help improve ZimRobotics by testing releases, reporting problems, suggesting features, or contributing code. Visit the <a href=\"https://github.com/engrzim/zimrobotics-configurator\" target=\"_blank\" rel=\"noopener noreferrer\">ZimRobotics repository</a> to get started."
     },
     "defaultFacebookText": {
-        "message": "We also have a <a href=\"https://www.facebook.com/groups/betaflightgroup/\" target=\"_blank\" rel=\"noopener noreferrer\">Facebook Group</a>.<br />Join us to get a place to talk about Betaflight, ask configuration questions, or just hang out with fellow pilots."
+        "message": "Follow ZimRobotics development and community updates in the <a href=\"https://github.com/engrzim/zimrobotics-configurator/discussions\" target=\"_blank\" rel=\"noopener noreferrer\">GitHub discussions</a>."
     },
     "defaultDiscordText": {
-        "message": "Betaflight <a href=\"https://discord.betaflight.com/invite\" target=\"_blank\" rel=\"noopener noreferrer\">Discord Server</a>.<br />Share your flight experience, talk about Betaflight, help other people or get some help for yourself from the community."
+        "message": "Join the <a href=\"https://github.com/engrzim/zimrobotics-configurator/discussions\" target=\"_blank\" rel=\"noopener noreferrer\">ZimRobotics community discussions</a> to share your flight experience, ask questions, and help other pilots."
     },
     "defaultRedditText": {
-        "message": "Join our <a href=\"https://www.reddit.com/r/Betaflight/\" target=\"_blank\" rel=\"noopener noreferrer\">Betaflight Subreddit</a>.<br />Discuss features, ask questions, and connect with the Betaflight community on Reddit."
+        "message": "Discuss ZimRobotics features and support topics in the <a href=\"https://github.com/engrzim/zimrobotics-configurator/discussions\" target=\"_blank\" rel=\"noopener noreferrer\">project community</a>."
     },
     "defaultCommunityHead": {
         "message": "Community"
@@ -1085,26 +1085,19 @@
         "message": "Your Privacy"
     },
     "statisticsDisclaimer": {
-        "message": "This ZimRobotics collects anonymous usage statistics. This usage data could include the number of launches, geographical region of the users, types of flight controllers, firmware versions, usage of UI elements and tabs, etc. We collect this data in order to better understand how the App is being used and community trends. We do this to help us develop an improved UI and overall experience. Users can opt-out of data collection in the Options tab. For information about how we collect and use your data, please see our <a href=\"https://www.betaflight.com/privacy\" rel=\"noopener noreferrer\" target=\"_blank\">privacy policy</a>."
+        "message": "ZimRobotics collects anonymous usage statistics. This data may include launches, general geographic region, flight-controller types, firmware versions, and use of interface elements. It helps improve the user experience. You can opt out in the Options tab; project information is available in the <a href=\"https://github.com/engrzim/zimrobotics-configurator\" rel=\"noopener noreferrer\" target=\"_blank\">ZimRobotics repository</a>."
     },
     "defaultButtonFirmwareFlasher": {
         "message": "Firmware Flasher"
     },
     "defaultDonateHead": {
-        "message": "Open Source Donations"
+        "message": "ZimRobotics Open Source"
     },
     "defaultDonateText": {
-        "message": "<p><strong>Betaflight</strong> is <strong>open source</strong> software and is available free of charge <strong>without warranty</strong> to all users.</p><p>If you find Betaflight useful, please consider <strong>supporting</strong> its development by donating.</p>"
+        "message": "<p><strong>ZimRobotics</strong> is open-source software made available free of charge and without warranty.</p>"
     },
     "defaultDonateBottom": {
-        "message": "<p>If you want to contribute financially on an ongoing basis, you should consider becoming a patron for us on $t(patreonLink.message).</p>"
-    },
-    "patreonLink": {
-        "message": "<a href=\"https://www.patreon.com/betaflight\" target=\"_blank\" rel=\"noopener noreferrer\">Patreon</a>",
-        "description": "Patreon is name, and should not require translation"
-    },
-    "defaultDonate": {
-        "message": "Donate"
+        "message": "<p>You can support development by contributing code, testing releases, and reporting issues on GitHub.</p>"
     },
     "defaultSponsorsHead": {
         "message": "Sponsors"
@@ -8766,7 +8759,7 @@
         "message": "File name"
     },
     "dialogFileNameDescription": {
-        "message": "The file will be saved in the 'Android/data/betaflight-app/{{folder}}' folder in your internal storage."
+        "message": "The file will be saved in the ZimRobotics app folder in your internal storage."
     },
     "dialogFileAlreadyExistsTitle": {
         "message": "This file already exists!"

@@ -12,38 +12,13 @@
                 <div class="column third_left text1 grid-col col4">
                     <div class="socialMediaParagraph">
                         <h2 v-html="$t('defaultCommunityHead')"></h2>
-                        <div class="logoSocialMedia">
-                            <img src="/images/discord-logo-color.svg" alt="Discord" class="socialMediaLogo" />
-                        </div>
                         <div class="socialMediaText" v-html="$t('defaultDiscordText')"></div>
-                    </div>
-                    <div class="socialMediaParagraph">
-                        <div class="logoSocialMedia">
-                            <img src="/images/reddit-logo.svg" alt="Reddit" class="socialMediaLogo" />
-                        </div>
-                        <div class="socialMediaText" v-html="$t('defaultRedditText')"></div>
-                    </div>
-                    <div class="socialMediaParagraph">
-                        <div class="logoSocialMedia">
-                            <img src="/images/flogo_RGB_HEX-1024.svg" alt="Facebook" class="socialMediaLogo" />
-                        </div>
-                        <div class="socialMediaText" v-html="$t('defaultFacebookText')"></div>
                     </div>
                 </div>
                 <div class="column third_center text3 grid-col col4">
                     <div class="wrap2">
                         <h3 v-html="$t('defaultDonateHead')"></h3>
                         <div v-html="$t('defaultDonateText')"></div>
-                        <div class="donate">
-                            <a
-                                href="https://paypal.me/betaflight"
-                                rel="noopener noreferrer"
-                                target="_blank"
-                                :title="$t('defaultDonate')"
-                            >
-                                <img src="/images/btn-donate.png" alt="Paypal" height="30" />
-                            </a>
-                        </div>
                         <div v-html="$t('defaultDonateBottom')"></div>
                     </div>
                 </div>
@@ -208,17 +183,6 @@ export default defineComponent({
             min-height: 187px;
             font-size: 11px;
         }
-        .donate {
-            margin-top: 10px;
-            text-align: center;
-        }
-    }
-}
-
-.donate {
-    img {
-        height: 2rem;
-        display: inline-block;
     }
 }
 

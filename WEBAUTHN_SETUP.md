@@ -1,6 +1,6 @@
 # WebAuthn Development Setup
 
-This guide will help you set up your development environment to test WebAuthn (passkey) authentication features in the Betaflight App.
+This guide will help you set up your development environment to test WebAuthn (passkey) authentication features in ZimRobotics.
 
 ## Prerequisites
 

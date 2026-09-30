@@ -1,7 +1,7 @@
 [package]
 name = "tauri-plugin-dfu"
 version = "0.1.0"
-description = "USB DFU transport for the Betaflight app on Android: Kotlin owns enumeration and permissions, Rust owns transfers via nusb on a duplicated fd."
+description = "USB DFU transport for ZimRobotics on Android: Kotlin owns enumeration and permissions, Rust owns transfers via nusb on a duplicated fd."
 authors = ["The Betaflight open source project."]
 license = "GPL-3.0"
 edition = "2024"

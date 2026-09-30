@@ -1,5 +1,5 @@
 ; ------------------------------------------
-; Installer for Betaflight App
+; Installer for ZimRobotics
 ; ------------------------------------------
 ; It receives from the command line with /D the parameters:
 ; version
@@ -9,18 +9,18 @@
 ; sourceFolder
 ; targetFolder
 
-#define ApplicationName "Betaflight App"
-#define CompanyName "The Betaflight open source project"
-#define CompanyUrl "https://betaflight.com/"
-#define ExecutableFileName "betaflight-app.exe"
-#define GroupName "Betaflight"
-#define InstallerFileName "betaflight-app_" + version + "_" + archName + "-installer"
-#define SourcePath "..\..\" + sourceFolder + "\betaflight-app\" + archName
-#define TargetFolderName "Betaflight-App"
-#define UpdatesUrl "https://github.com/betaflight/betaflight-configurator/releases"
+#define ApplicationName "ZimRobotics"
+#define CompanyName "ZimRobotics"
+#define CompanyUrl "https://github.com/engrzim/zimrobotics-configurator"
+#define ExecutableFileName "zimrobotics-app.exe"
+#define GroupName "ZimRobotics"
+#define InstallerFileName "zimrobotics_" + version + "_" + archName + "-installer"
+#define SourcePath "..\..\" + sourceFolder + "\zimrobotics-app\" + archName
+#define TargetFolderName "ZimRobotics"
+#define UpdatesUrl "https://github.com/engrzim/zimrobotics-configurator/releases"
 
 [CustomMessages]
-AppName=betaflight-app
+AppName=zimrobotics-app
 LaunchProgram=Start {#ApplicationName}
 
 [Files]
@@ -85,13 +85,13 @@ MinVersion=6.2
 OutputBaseFilename={#InstallerFileName}
 OutputDir=..\..\{#targetFolder}\
 PrivilegesRequiredOverridesAllowed=commandline dialog
-SetupIconFile=bf_installer_icon.ico
+SetupIconFile=zimrobotics_installer_icon.ico
 ShowLanguageDialog=yes
 SolidCompression=yes
 UninstallDisplayIcon={app}\{#ExecutableFileName}
 UninstallDisplayName={#ApplicationName}
-WizardImageFile=bf_installer.bmp
-WizardSmallImageFile=bf_installer_small.bmp
+WizardImageFile=zimrobotics_installer.bmp
+WizardSmallImageFile=zimrobotics_installer_small.bmp
 WizardStyle=modern
 
 [Code]

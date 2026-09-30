@@ -91,7 +91,7 @@ jobs:
         uses: actions/setup-java@v5
         with:
           distribution: temurin
-          java-version: '17'
+          java-version: '21'
 
       # Default 'packages' input includes the legacy 'tools' package, which
       # Google removed from the SDK repository — sdkmanager fails to find it.
@@ -137,7 +137,7 @@ jobs:
       - name: Upload Android APK artifact
         uses: actions/upload-artifact@v6
         with:
-          name: betaflight-app-android-debug
+          name: zimrobotics-tauri-android-debug
           path: ${{ steps.apk.outputs.path }}
           if-no-files-found: error
           retention-days: 14

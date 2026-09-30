@@ -7,7 +7,7 @@ name: Tauri Android release
 # run outranks the previous upload. versionName = <version>.<run_number>.
 #
 # Required repository secrets (distinct from the Capacitor RELEASE_* secrets):
-#   ANDROID_UPLOAD_KEYSTORE           base64 of the upload keystore (betaflight-upload.jks)
+#   ANDROID_UPLOAD_KEYSTORE           base64 of the ZimRobotics upload keystore
 #   ANDROID_UPLOAD_KEYSTORE_PASSWORD  keystore (store) password
 #   ANDROID_UPLOAD_KEY_ALIAS          key alias (upload)
 #   ANDROID_UPLOAD_KEY_PASSWORD       key password
@@ -54,7 +54,7 @@ jobs:
         uses: actions/setup-java@v5
         with:
           distribution: temurin
-          java-version: '17'
+          java-version: '21'
 
       # Default 'packages' input includes the legacy 'tools' package, which
       # Google removed from the SDK repository — sdkmanager fails to find it.
@@ -92,7 +92,7 @@ jobs:
           : "${ANDROID_UPLOAD_KEYSTORE_PASSWORD:?Set the ANDROID_UPLOAD_KEYSTORE_PASSWORD secret}"
           : "${ANDROID_UPLOAD_KEY_ALIAS:?Set the ANDROID_UPLOAD_KEY_ALIAS secret}"
           : "${ANDROID_UPLOAD_KEY_PASSWORD:?Set the ANDROID_UPLOAD_KEY_PASSWORD secret}"
-          KS="$RUNNER_TEMP/betaflight-upload.jks"
+          KS="$RUNNER_TEMP/zimrobotics-upload.jks"
           echo "$ANDROID_UPLOAD_KEYSTORE" | base64 --decode > "$KS"
           # Write each property explicitly — a heredoc here would fold the YAML
           # block indentation into the values and corrupt the keystore path.
@@ -117,7 +117,7 @@ jobs:
       - name: Upload AAB artifact
         uses: actions/upload-artifact@v6
         with:
-          name: betaflight-app-aab
+          name: zimrobotics-tauri-aab
           path: ${{ steps.aab.outputs.path }}
           if-no-files-found: error
           retention-days: 30

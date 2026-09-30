@@ -8,7 +8,7 @@
 # after the app restarts.
 set -euo pipefail
 
-PACKAGE="${PACKAGE:-com.betaflight.app}"
+PACKAGE="${PACKAGE:-com.zimrobotics.app}"
 PORT="${PORT:-9222}"
 
 DEVICE_ARGS=()

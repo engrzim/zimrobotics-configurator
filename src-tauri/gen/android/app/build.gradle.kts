@@ -23,7 +23,7 @@ val keystoreProperties = Properties().apply {
 
 android {
     compileSdk = 36
-    namespace = "com.betaflight.app"
+    namespace = "com.zimrobotics.app"
     defaultConfig {
         manifestPlaceholders["usesCleartextTraffic"] = "false"
         applicationId = "com.zimrobotics.app"

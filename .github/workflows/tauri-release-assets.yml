@@ -299,7 +299,7 @@ jobs:
         uses: actions/setup-java@v5
         with:
           distribution: temurin
-          java-version: '17'
+          java-version: '21'
 
       # Default 'packages' input includes the legacy 'tools' package, which
       # Google removed from the SDK repository — sdkmanager fails to find it.
@@ -354,7 +354,7 @@ jobs:
           : "${RELEASE_KEYSTORE_PASSWORD:?Set the RELEASE_KEYSTORE_PASSWORD secret}"
           : "${RELEASE_KEY_ALIAS:?Set the RELEASE_KEY_ALIAS secret}"
           : "${RELEASE_KEY_ALIAS_PASSWORD:?Set the RELEASE_KEY_ALIAS_PASSWORD secret}"
-          KS="$RUNNER_TEMP/betaflight-release.jks"
+          KS="$RUNNER_TEMP/zimrobotics-release.jks"
           echo "$RELEASE_KEYSTORE_BASE64" | base64 --decode > "$KS"
           {
             printf 'storeFile=%s\n' "$KS"
@@ -370,7 +370,7 @@ jobs:
         run: |
           mkdir -p staging
           VERSION=$(jq -r '.version' package.json)
-          APK_NAME="betaflight-${VERSION}-tauri.apk"
+          APK_NAME="zimrobotics-${VERSION}-tauri.apk"
           APK=$(find src-tauri/gen/android/app/build/outputs/apk -name '*.apk' -path '*release*' | grep -iv unsigned | grep -i universal | head -1)
           if [ -z "$APK" ]; then
             APK=$(find src-tauri/gen/android/app/build/outputs/apk -name '*.apk' -path '*release*' | grep -iv unsigned | head -1)

@@ -33,12 +33,37 @@ jobs:
     uses: ./.github/workflows/build.yml
     with:
       debug_build: false
-      build_apk: false
+      build_apk: true
       commit_ref: ${{ github.event.release.target_commitish }}
+    secrets:
+      RELEASE_KEYSTORE: ${{ secrets.RELEASE_KEYSTORE }}
+      RELEASE_KEYSTORE_PASSWORD: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
+      RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
+      RELEASE_KEY_ALIAS_PASSWORD: ${{ secrets.RELEASE_KEY_ALIAS_PASSWORD }}
 
-  # Build the Tauri desktop bundles (Windows/macOS/Linux) and the signed Tauri
-  # Android APK, then attach them to the release. The Tauri APK is the release's
-  # Android download; the Capacitor APK from build.yml is no longer attached.
+  publish_capacitor_apk:
+    name: Attach Capacitor APK
+    needs: [check_tag, modern_build]
+    if: needs.check_tag.outputs.should_run == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: write
+    steps:
+      - name: Download Capacitor APK
+        uses: actions/download-artifact@v7
+        with:
+          name: zimrobotics-capacitor-apk
+          path: capacitor-apk
+
+      - name: Attach Capacitor APK to release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: gh release upload "$RELEASE_TAG" capacitor-apk/*.apk --clobber
+
+  # Build the Tauri desktop bundles (Windows/macOS/Linux) and signed Tauri
+  # Android APK, then attach them alongside the Capacitor APK.
   modern_release:
     name: Attach Release Artifacts
     needs: check_tag
@@ -135,7 +160,7 @@ jobs:
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
       CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
-  # Deploy to https://app.betaflight.com if latest release
+  # Deploy the latest ZimRobotics release to the configured production environment.
   modern_deploy_latest:
     name: Deploy Latest to Production
     needs: [modern_build, check_latest]

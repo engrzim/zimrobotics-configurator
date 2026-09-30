@@ -137,7 +137,7 @@ jobs:
       - name: Upload IPA artifact
         uses: actions/upload-artifact@v6
         with:
-          name: betaflight-app-ipa
+          name: zimrobotics-ios-ipa
           path: ${{ steps.ipa.outputs.path }}
           if-no-files-found: error
           retention-days: 30

@@ -1,4 +1,4 @@
-//! USB DFU plugin for the Betaflight app on Android.
+//! USB DFU plugin for the ZimRobotics app on Android.
 //!
 //! Split forced by nusb on Android (no enumeration or hotplug there): Kotlin
 //! owns device listing, the permission dialog and `openDevice`, then hands the

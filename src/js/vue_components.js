@@ -1,5 +1,5 @@
 import BatteryLegend from "../components/quad-status/BatteryLegend.vue";
-import BetaflightLogo from "../components/betaflight-logo/BetaflightLogo.vue";
+import ZimRoboticsLogo from "../components/zimrobotics-logo/ZimRoboticsLogo.vue";
 import StatusBar from "../components/status-bar/StatusBar.vue";
 import BatteryIcon from "../components/quad-status/BatteryIcon.vue";
 import BottomStatusIcons from "../components/quad-status/BottomStatusIcons.vue";
@@ -16,7 +16,7 @@ export const BetaflightComponents = {
     install(app) {
         app.component("App", App);
         // Register all components globally
-        app.component("BetaflightLogo", BetaflightLogo);
+        app.component("ZimRoboticsLogo", ZimRoboticsLogo);
         app.component("BatteryLegend", BatteryLegend);
         app.component("StatusBar", StatusBar);
         app.component("BatteryIcon", BatteryIcon);

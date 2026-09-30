@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 /*
- * Generate the static downloads index for downloads.betaflight.com.
+ * Generate the static ZimRobotics downloads index.
  *
  * Inputs:
  *   --manifest <path>     JSON manifest of today's nightly artefact URLs (R2)
  *   --releases <path>     JSON file with the GitHub releases payload (output of `gh api releases`)
  *   --output <dir>        Output directory; index.html and favicon.png are written here
  *   --master-url <url>    URL to the master branch web app deploy
- *   --release-url <url>   URL to the release web app (default: https://app.betaflight.com)
+ *   --release-url <url>   Optional URL to the ZimRobotics release web app
  *
  * The manifest schema is documented in the workflow that calls this script.
  */
@@ -98,11 +98,6 @@ function fileList(entries) {
     return `<ul class="file-list">${entries.map(fileListItem).join("")}</ul>`;
 }
 
-// The per-release web app lives at https://<major>-<minor>.app.betaflight.com
-// (CalVer, e.g. 2026.6.0-RC1 -> https://2026-6.app.betaflight.com). That scheme
-// begins with 2026.6; older releases have no such subdomain.
-const RELEASE_WEBAPP_MIN = { major: 2026, minor: 6 };
-
 // Parse a CalVer/SemVer tag ("2026.6.0", "2026.6.0-RC1", "v2026.6.0") into its
 // numeric parts plus an optional pre-release string.
 function parseVersion(tag) {
@@ -177,22 +172,12 @@ function highestRelease(releases) {
     return best;
 }
 
-// Which web app the hero should point at. A final release is what
-// app.betaflight.com already serves, so link there; a pre-release (e.g. an RC)
-// gets its own versioned subdomain. Pre-releases predating the versioned scheme
-// have no subdomain, so no hero.
+// Use the configured ZimRobotics web-app deployment for release links.
 function heroWebApp(top, releaseUrl) {
-    if (!top) {
+    if (!top || !releaseUrl) {
         return null;
     }
-    if (!top.release.prerelease) {
-        return { url: releaseUrl };
-    }
-    const { major, minor } = top.version;
-    if (major * 1000 + minor < RELEASE_WEBAPP_MIN.major * 1000 + RELEASE_WEBAPP_MIN.minor) {
-        return null;
-    }
-    return { url: `https://${major}-${minor}.app.betaflight.com` };
+    return { url: releaseUrl };
 }
 
 function renderReleaseWebAppSection(top, hero) {
@@ -473,11 +458,10 @@ try {
     const publicReleases = releases.filter((r) => !r.draft);
     const latestStable = publicReleases.find((r) => !r.prerelease) || null;
 
-    const masterUrl = args["master-url"] || "https://master.betaflight-app.pages.dev";
-    const releaseUrl = args["release-url"] || "https://app.betaflight.com";
+    const masterUrl = args["master-url"] || "https://github.com/engrzim/zimrobotics-configurator";
+    const releaseUrl = args["release-url"] || "https://github.com/engrzim/zimrobotics-configurator/releases";
 
-    // Feature the highest-versioned release at the top: final releases link to
-    // app.betaflight.com, pre-releases to their own versioned subdomain.
+    // Feature the highest-versioned release at the configured ZimRobotics URL.
     const topRelease = highestRelease(publicReleases);
     const hero = heroWebApp(topRelease, releaseUrl);
 
@@ -497,7 +481,7 @@ try {
     writeFileSync(join(outputDir, "index.html"), html);
 
     const repoRoot = resolve(__dirname, "..");
-    copyFileSync(join(repoRoot, "src-tauri/icons/bf_icon_128.png"), join(outputDir, "favicon.png"));
+    copyFileSync(join(repoRoot, "src-tauri/icons/zimrobotics_icon_128.png"), join(outputDir, "favicon.png"));
 
     console.log(`Wrote ${join(outputDir, "index.html")}`);
 } catch (error) {

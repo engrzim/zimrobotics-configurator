@@ -145,11 +145,11 @@ jobs:
           if [[ "$IS_DEBUG" == "true" ]]; then
             echo "--- DEBUG MODE ---"
             SHA=$(echo ${{ github.event.pull_request.head.sha }} | head -c 8)
-            apk_name=betaflight-app-$VERSION-$SHA.apk
+            apk_name=zimrobotics-$VERSION-$SHA-capacitor.apk
             apk_path=android/app/build/outputs/apk/debug/app-debug.apk
           else
             echo "--- RELEASE MODE ---"
-            apk_name=betaflight-app-$VERSION.apk
+            apk_name=zimrobotics-$VERSION-capacitor.apk
             apk_path=android/app/build/outputs/apk/release/app-release.apk
           fi
           cp "$apk_path" artifacts/$apk_name
@@ -160,7 +160,7 @@ jobs:
         id: apk_upload
         uses: actions/upload-artifact@v6
         with:
-          name: betaflight-app-apk
+          name: zimrobotics-capacitor-apk
           path: artifacts/${{ steps.apk_name_set.outputs.apk_name }}
 
       - name: Upload build artifact

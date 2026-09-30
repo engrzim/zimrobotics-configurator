@@ -1,4 +1,4 @@
-name: betaflight-app
+name: zimrobotics-app
 options:
   bundleIdPrefix: com.zimrobotics.app
   deploymentTarget:
@@ -25,20 +25,20 @@ targetTemplates:
     settings:
       groups: [app]
 targets:
-  betaflight-app_iOS:
+  zimrobotics-app_iOS:
     type: application
     platform: iOS
     sources:
       - path: Sources
       - path: Assets.xcassets
       - path: Externals
-      - path: betaflight-app_iOS
+      - path: zimrobotics-app_iOS
       - path: assets
         buildPhase: resources
         type: folder
       - path: LaunchScreen.storyboard
     info:
-      path: betaflight-app_iOS/Info.plist
+      path: zimrobotics-app_iOS/Info.plist
       properties:
         LSRequiresIPhoneOS: true
         UILaunchStoryboardName: LaunchScreen
@@ -64,7 +64,7 @@ targets:
         NSAppTransportSecurity:
           NSAllowsLocalNetworking: true
     entitlements:
-      path: betaflight-app_iOS/betaflight-app_iOS.entitlements
+      path: zimrobotics-app_iOS/zimrobotics-app_iOS.entitlements
     scheme:
       environmentVariables:
         RUST_BACKTRACE: full

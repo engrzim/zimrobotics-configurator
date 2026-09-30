@@ -8,9 +8,7 @@ def buildNumberEnv = System.getenv("ANDROID_BUILD_NUMBER")
 def buildNumber = buildNumberEnv?.isInteger() ? buildNumberEnv.toInteger() : 0
 
 android {
-    // namespace stays betaflight.app because the Java sources live in that
-    // package; only applicationId identifies the installed app.
-    namespace = "betaflight.app"
+    namespace = "com.zimrobotics.app.capacitor"
     compileSdk = rootProject.ext.compileSdkVersion
     defaultConfig {
         applicationId "com.zimrobotics.app.capacitor"

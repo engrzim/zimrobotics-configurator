@@ -1,9 +1,8 @@
 name: Nightly downloads
 
 # Builds Tauri desktop bundles + a Capacitor Android APK + a signed Tauri Android
-# APK every day, uploads them to the Cloudflare R2 bucket behind
-# binaries.betaflight.com, regenerates the static downloads index, and deploys it
-# to the betaflight-downloads Cloudflare Pages project (downloads.betaflight.com).
+# APK every day, uploads them to the configured Cloudflare R2 bucket, regenerates
+# the static ZimRobotics downloads index, and deploys it to Cloudflare Pages.
 #
 # iOS ships via TestFlight (tauri-ios-release.yml), not the downloads page, so the
 # nightly runs the full unsigned iOS compile check from tauri-pr-build.yml instead
@@ -13,12 +12,12 @@ name: Nightly downloads
 #
 # Required repository configuration:
 #   Variables:
-#     CLOUDFLARE_R2_BUCKET                 — R2 bucket name (e.g. betaflight-downloads)
+#     CLOUDFLARE_R2_BUCKET                 — R2 bucket name
 #     CLOUDFLARE_R2_ENDPOINT               — https://<accountid>.r2.cloudflarestorage.com
-#     CLOUDFLARE_R2_PUBLIC_BASE_URL        — https://binaries.betaflight.com
-#     CLOUDFLARE_DOWNLOADS_PROJECT_NAME    — Cloudflare Pages project (e.g. betaflight-downloads)
+#     CLOUDFLARE_R2_PUBLIC_BASE_URL        — public ZimRobotics binary base URL
+#     CLOUDFLARE_DOWNLOADS_PROJECT_NAME    — ZimRobotics Cloudflare Pages project
 #     WEB_APP_MASTER_URL (optional)        — Master web-app URL (defaults to main project preview)
-#     WEB_APP_RELEASE_URL (optional)       — Release web-app URL (defaults to https://app.betaflight.com)
+#     WEB_APP_RELEASE_URL (optional)       — ZimRobotics release web-app URL
 #   Secrets:
 #     CLOUDFLARE_R2_ACCESS_KEY_ID
 #     CLOUDFLARE_R2_SECRET_ACCESS_KEY
@@ -442,7 +441,7 @@ jobs:
         uses: actions/setup-java@v5
         with:
           distribution: temurin
-          java-version: '17'
+          java-version: '21'
 
       # Default 'packages' input includes the legacy 'tools' package, which
       # Google removed from the SDK repository — sdkmanager fails to find it.
@@ -483,7 +482,7 @@ jobs:
           : "${RELEASE_KEYSTORE_PASSWORD:?Set the RELEASE_KEYSTORE_PASSWORD secret}"
           : "${RELEASE_KEY_ALIAS:?Set the RELEASE_KEY_ALIAS secret}"
           : "${RELEASE_KEY_ALIAS_PASSWORD:?Set the RELEASE_KEY_ALIAS_PASSWORD secret}"
-          KS="$RUNNER_TEMP/betaflight-release.jks"
+          KS="$RUNNER_TEMP/zimrobotics-release.jks"
           echo "$RELEASE_KEYSTORE_BASE64" | base64 --decode > "$KS"
           {
             printf 'storeFile=%s\n' "$KS"
