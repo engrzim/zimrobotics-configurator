@@ -44,7 +44,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "github.com/betaflight/betaflight-configurator"
+    "url": "github.com/engrzim/zimrobotics-configurator"
   },
   "author": "ZimRobotics",
   "license": "GPL-3.0",

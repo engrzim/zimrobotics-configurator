@@ -3,7 +3,7 @@
         <div class="content_wrapper">
             <div class="content_top">
                 <div class="logowrapper">
-                    <img src="/images/bf_logo_white.svg" alt="" />
+                    <img src="/images/zimrobotics_logo.png" alt="ZimRobotics" />
                     <div v-html="$t('defaultWelcomeIntro')"></div>
                 </div>
             </div>
@@ -244,8 +244,10 @@ export default defineComponent({
     }
 
     img {
-        width: 600px;
+        width: min(600px, 90vw);
+        height: auto;
         margin: 5px;
+        border-radius: 4px;
     }
 
     span {

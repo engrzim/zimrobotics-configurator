@@ -13,7 +13,7 @@ android {
     namespace = "betaflight.app"
     compileSdk = rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "com.betaflight.app.capacitor"
+        applicationId "com.zimrobotics.app.capacitor"
         minSdk = rootProject.ext.minSdkVersion
         targetSdk = rootProject.ext.targetSdkVersion
         // Mirrors the Tauri Android scheme in src-tauri/gen/android/app/build.gradle.kts:

@@ -1,6 +1,6 @@
 name: betaflight-app
 options:
-  bundleIdPrefix: com.betaflight.app
+  bundleIdPrefix: com.zimrobotics.app
   deploymentTarget:
     iOS: 13.0
 fileGroups: [../../src]
@@ -10,8 +10,8 @@ configs:
 settingGroups:
   app:
     base:
-      PRODUCT_NAME: Betaflight
-      PRODUCT_BUNDLE_IDENTIFIER: com.betaflight.app
+      PRODUCT_NAME: ZimRobotics
+      PRODUCT_BUNDLE_IDENTIFIER: com.zimrobotics.app
       DEVELOPMENT_TEAM: 88U8UVP252
 targetTemplates:
   app:
@@ -54,10 +54,10 @@ targets:
           - UIInterfaceOrientationLandscapeRight
         CFBundleShortVersionString: 2026.6.0
         CFBundleVersion: "2026.6.0"
-        NSLocalNetworkUsageDescription: Betaflight connects to your flight controller bridge over the local network.
+        NSLocalNetworkUsageDescription: ZimRobotics connects to your flight controller bridge over the local network.
         NSBonjourServices:
           - _betaflight._tcp
-        NSBluetoothAlwaysUsageDescription: Betaflight connects to your flight controller over Bluetooth Low Energy.
+        NSBluetoothAlwaysUsageDescription: ZimRobotics connects to your flight controller over Bluetooth Low Energy.
         # The dev server (tauri ios dev --host <ip>) is plain HTTP on the LAN. Without this,
         # ATS blocks the webview from loading it and the app silently falls back to the
         # embedded, possibly stale, frontend bundle.

@@ -56,14 +56,14 @@ export default defineComponent({
 .tab_container .logo_image {
     width: 100%;
     height: 48px;
-    background-image: url(../../images/bf_logo_white.svg);
+    background-image: url(../../images/zimrobotics_logo.png);
     background-repeat: no-repeat;
     background-position: left center;
     background-size: contain;
 }
 
 .dark .tab_container .logo_image {
-    background-image: url(../../images/bf_logo_black.svg);
+    background-image: url(../../images/zimrobotics_logo.png);
 }
 
 @media (max-width: 1055px) {
@@ -72,12 +72,12 @@ export default defineComponent({
     }
     .tab_container .logo_image {
         width: 48px;
-        background-image: url(../../images/bf_logo_short_white.svg);
+        background-image: url(../../images/zimrobotics_logo.png);
         background-position: center;
         background-size: contain;
     }
     .dark .tab_container .logo_image {
-        background-image: url(../../images/bf_logo_short_black.svg);
+        background-image: url(../../images/zimrobotics_logo.png);
     }
 }
 

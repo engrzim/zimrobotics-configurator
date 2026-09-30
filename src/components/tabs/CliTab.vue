@@ -346,7 +346,7 @@ body.mobile-app-shell {
 
 /* background-image needs CSS for Vite asset resolution */
 .tab-cli .cli-backdrop {
-    background-image: url("../../images/light-wide-1.svg");
+    background-image: url("../../images/zimrobotics_logo.png");
 }
 
 /* Allow text selection in the CLI output area.

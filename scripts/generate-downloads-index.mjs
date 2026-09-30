@@ -203,7 +203,7 @@ function renderReleaseWebAppSection(top, hero) {
     const host = escapeHtml(hero.url.replace(/^https:\/\//, ""));
     return `
             <section class="release-hero">
-                <h2>Betaflight App &mdash; ${tag}</h2>
+                <h2>ZimRobotics &mdash; ${tag}</h2>
                 <p><a class="hero-link" href="${escapeHtml(hero.url)}">Open the web app for this release &rarr;</a></p>
                 <p class="meta">Runs in your browser at ${host}</p>
             </section>`;
@@ -253,7 +253,7 @@ function renderNightlySection(nightly) {
     }
     if (commitShort) {
         metaParts.push(
-            `commit <a href="https://github.com/betaflight/betaflight-configurator/commit/${escapeHtml(nightly.commit)}">${escapeHtml(commitShort)}</a>`,
+            `commit <a href="https://github.com/engrzim/zimrobotics-configurator/commit/${escapeHtml(nightly.commit)}">${escapeHtml(commitShort)}</a>`,
         );
     }
     if (nightly.version) {
@@ -372,7 +372,7 @@ function renderDownloadSection(latest) {
 
 const RECENT_RELEASE_YEARS = 4;
 const PRERELEASE_VISIBILITY_MONTHS = 9;
-const RELEASES_INDEX_URL = "https://github.com/betaflight/betaflight-configurator/releases";
+const RELEASES_INDEX_URL = "https://github.com/engrzim/zimrobotics-configurator/releases";
 
 function renderReleaseHistorySection(releases) {
     if (!releases?.length) {

@@ -3,6 +3,6 @@
 <plist version="1.0">
 <dict>
 	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>Betaflight connects to your flight controller over Bluetooth Low Energy.</string>
+	<string>ZimRobotics connects to your flight controller over Bluetooth Low Energy.</string>
 </dict>
 </plist>

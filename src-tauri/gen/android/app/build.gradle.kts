@@ -26,7 +26,7 @@ android {
     namespace = "com.betaflight.app"
     defaultConfig {
         manifestPlaceholders["usesCleartextTraffic"] = "false"
-        applicationId = "com.betaflight.app"
+        applicationId = "com.zimrobotics.app"
         // 26 is the floor imposed by the BLE plugin's Android library.
         minSdk = 26
         targetSdk = 36
