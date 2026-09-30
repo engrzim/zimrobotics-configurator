@@ -1,4 +1,4 @@
-![ZimRobotics](https://raw.githubusercontent.com/engrzim/zimrobotics-configurator/master/src/images/zimrobotics_logo.png)
+![ZimRobotics](src/images/zimrobotics_logo.png)
 
 # ZimRobotics
 
