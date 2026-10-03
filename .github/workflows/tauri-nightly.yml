@@ -1,16 +1,17 @@
 name: Nightly downloads
 
-# Builds Tauri desktop bundles + a Capacitor Android APK + a signed Tauri Android
-# APK every day, uploads them to the configured Cloudflare R2 bucket, regenerates
-# the static ZimRobotics downloads index, and deploys it to Cloudflare Pages.
+# Builds Tauri desktop bundles + Capacitor and Tauri Android APKs every day.
+# Every build is retained as a GitHub artifact and published to the moving
+# `nightly` prerelease. R2 and Cloudflare Pages are optional mirrors.
 #
 # iOS ships via TestFlight (tauri-ios-release.yml), not the downloads page, so the
 # nightly runs the full unsigned iOS compile check from tauri-pr-build.yml instead
 # of building an IPA — it protects master without needing signing secrets.
 #
-# The Tauri Android job reuses the existing RELEASE_KEYSTORE secrets (no new ones).
+# Android release signing is used when all keystore secrets are available;
+# otherwise the nightly publishes an explicitly labelled debug APK.
 #
-# Required repository configuration:
+# Optional repository configuration:
 #   Variables:
 #     CLOUDFLARE_R2_BUCKET                 — R2 bucket name
 #     CLOUDFLARE_R2_ENDPOINT               — https://<accountid>.r2.cloudflarestorage.com
@@ -36,7 +37,7 @@ name: Nightly downloads
 
 on:
   schedule:
-    - cron: '0 3 * * *'
+    - cron: "0 3 * * *"
   workflow_dispatch:
 
 concurrency:
@@ -55,6 +56,8 @@ jobs:
       nightly_prefix: ${{ steps.meta.outputs.nightly_prefix }}
       commit_sha: ${{ steps.meta.outputs.commit_sha }}
       version: ${{ steps.meta.outputs.version }}
+      r2_enabled: ${{ steps.config.outputs.r2_enabled }}
+      pages_enabled: ${{ steps.config.outputs.pages_enabled }}
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -72,6 +75,31 @@ jobs:
             echo "version=${VERSION}"
           } >> "$GITHUB_OUTPUT"
 
+      - name: Detect optional publishers
+        id: config
+        env:
+          R2_BUCKET: ${{ vars.CLOUDFLARE_R2_BUCKET }}
+          R2_ENDPOINT: ${{ vars.CLOUDFLARE_R2_ENDPOINT }}
+          R2_PUBLIC_BASE: ${{ vars.CLOUDFLARE_R2_PUBLIC_BASE_URL }}
+          R2_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+          R2_SECRET_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+          CF_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CF_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CF_PROJECT: ${{ vars.CLOUDFLARE_DOWNLOADS_PROJECT_NAME }}
+        run: |
+          if [ -n "$R2_BUCKET" ] && [ -n "$R2_ENDPOINT" ] && [ -n "$R2_PUBLIC_BASE" ] && [ -n "$R2_ACCESS_KEY" ] && [ -n "$R2_SECRET_KEY" ]; then
+            echo "r2_enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "r2_enabled=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::R2 configuration is incomplete; GitHub Releases will be the download host."
+          fi
+          if [ -n "$CF_API_TOKEN" ] && [ -n "$CF_ACCOUNT_ID" ] && [ -n "$CF_PROJECT" ]; then
+            echo "pages_enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "pages_enabled=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Cloudflare Pages configuration is incomplete; the generated index will remain a workflow artifact."
+          fi
+
   desktop:
     name: Tauri desktop (${{ matrix.label }})
     needs: prepare
@@ -81,7 +109,7 @@ jobs:
         include:
           - os: ubuntu-latest
             label: linux
-            target: ''
+            target: ""
           - os: macos-latest
             label: macos-arm64
             target: aarch64-apple-darwin
@@ -90,7 +118,7 @@ jobs:
             target: x86_64-apple-darwin
           - os: windows-latest
             label: windows
-            target: ''
+            target: ""
     runs-on: ${{ matrix.os }}
     permissions:
       contents: read
@@ -258,6 +286,7 @@ jobs:
           done
 
       - name: Sync desktop bundles to R2
+        if: needs.prepare.outputs.r2_enabled == 'true'
         shell: bash
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
@@ -269,10 +298,17 @@ jobs:
         run: |
           aws s3 sync staging/ "s3://${R2_BUCKET}/${PREFIX}/" --endpoint-url "${R2_ENDPOINT}" --no-progress
 
+      - name: Upload desktop bundles
+        uses: actions/upload-artifact@v6
+        with:
+          name: bundles-${{ matrix.label }}
+          path: staging/*
+          if-no-files-found: error
+
       - name: Emit per-platform manifest fragment
         shell: bash
         env:
-          PUBLIC_BASE: ${{ vars.CLOUDFLARE_R2_PUBLIC_BASE_URL }}
+          PUBLIC_BASE: ${{ needs.prepare.outputs.r2_enabled == 'true' && vars.CLOUDFLARE_R2_PUBLIC_BASE_URL || format('https://github.com/{0}/releases/download/nightly', github.repository) }}
           PREFIX: ${{ needs.prepare.outputs.nightly_prefix }}/desktop
           PLATFORM: ${{ matrix.label }}
         run: |
@@ -306,11 +342,14 @@ jobs:
               } else {
                   return null;
               }
+              const downloadPath = base.includes('github.com/')
+                  ? `${base}/${encodeURIComponent(file)}`
+                  : `${base}/${prefix}/${encodeURIComponent(file)}`;
               return {
                   group,
                   entry: {
                       label,
-                      url: `${base}/${prefix}/${encodeURIComponent(file)}`,
+                      url: downloadPath,
                       size: stat.size,
                   },
               };
@@ -350,10 +389,11 @@ jobs:
         uses: actions/setup-java@v5
         with:
           distribution: temurin
-          java-version: '21'
+          java-version: "21"
           cache: gradle
 
-      - name: Build and sign APK
+      - name: Build APK
+        id: apk_build
         env:
           RELEASE_KEYSTORE_BASE64: ${{ secrets.RELEASE_KEYSTORE }}
           RELEASE_KEYSTORE_PASSWORD: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
@@ -361,21 +401,22 @@ jobs:
           RELEASE_KEY_ALIAS_PASSWORD: ${{ secrets.RELEASE_KEY_ALIAS_PASSWORD }}
           ANDROID_BUILD_NUMBER: ${{ github.run_number }}
         run: |
-          : "${RELEASE_KEYSTORE_BASE64:?Set the RELEASE_KEYSTORE secret with your base64-encoded keystore}"
-          : "${RELEASE_KEYSTORE_PASSWORD:?Set the RELEASE_KEYSTORE_PASSWORD secret with your keystore password}"
-          : "${RELEASE_KEY_ALIAS:?Set the RELEASE_KEY_ALIAS secret with your key alias}"
-          : "${RELEASE_KEY_ALIAS_PASSWORD:?Set the RELEASE_KEY_ALIAS_PASSWORD secret with your key alias password}"
-
-          mkdir -p android/keystore
-          echo "$RELEASE_KEYSTORE_BASE64" | base64 --decode > android/keystore/release.jks
-
           pushd android >/dev/null
           ./gradlew clean
-          ./gradlew assembleRelease \
-            -Pandroid.injected.signing.store.file="$PWD/keystore/release.jks" \
-            -Pandroid.injected.signing.store.password="$RELEASE_KEYSTORE_PASSWORD" \
-            -Pandroid.injected.signing.key.alias="$RELEASE_KEY_ALIAS" \
-            -Pandroid.injected.signing.key.password="$RELEASE_KEY_ALIAS_PASSWORD"
+          if [ -n "$RELEASE_KEYSTORE_BASE64" ] && [ -n "$RELEASE_KEYSTORE_PASSWORD" ] && [ -n "$RELEASE_KEY_ALIAS" ] && [ -n "$RELEASE_KEY_ALIAS_PASSWORD" ]; then
+            mkdir -p keystore
+            echo "$RELEASE_KEYSTORE_BASE64" | base64 --decode > keystore/release.jks
+            ./gradlew assembleRelease \
+              -Pandroid.injected.signing.store.file="$PWD/keystore/release.jks" \
+              -Pandroid.injected.signing.store.password="$RELEASE_KEYSTORE_PASSWORD" \
+              -Pandroid.injected.signing.key.alias="$RELEASE_KEY_ALIAS" \
+              -Pandroid.injected.signing.key.password="$RELEASE_KEY_ALIAS_PASSWORD"
+            echo "variant=release" >> "$GITHUB_OUTPUT"
+          else
+            echo "::notice::Android signing secrets are incomplete; publishing a debug APK."
+            ./gradlew assembleDebug
+            echo "variant=debug" >> "$GITHUB_OUTPUT"
+          fi
           popd >/dev/null
 
       - name: Stage APK
@@ -385,11 +426,20 @@ jobs:
         run: |
           mkdir -p staging
           SHA_SHORT=$(echo "$COMMIT_SHA" | head -c 8)
-          APK_NAME="zimrobotics-${VERSION}-${SHA_SHORT}-capacitor.apk"
-          cp android/app/build/outputs/apk/release/app-release.apk "staging/${APK_NAME}"
+          VARIANT="${{ steps.apk_build.outputs.variant }}"
+          APK_NAME="zimrobotics-${VERSION}-${SHA_SHORT}-capacitor-${VARIANT}.apk"
+          cp "android/app/build/outputs/apk/${VARIANT}/app-${VARIANT}.apk" "staging/${APK_NAME}"
           echo "APK_NAME=${APK_NAME}" >> "$GITHUB_ENV"
 
+      - name: Upload Capacitor APK
+        uses: actions/upload-artifact@v6
+        with:
+          name: bundles-android-capacitor
+          path: staging/*
+          if-no-files-found: error
+
       - name: Sync APK to R2
+        if: needs.prepare.outputs.r2_enabled == 'true'
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
@@ -402,13 +452,16 @@ jobs:
 
       - name: Emit Android manifest fragment
         env:
-          PUBLIC_BASE: ${{ vars.CLOUDFLARE_R2_PUBLIC_BASE_URL }}
+          PUBLIC_BASE: ${{ needs.prepare.outputs.r2_enabled == 'true' && vars.CLOUDFLARE_R2_PUBLIC_BASE_URL || format('https://github.com/{0}/releases/download/nightly', github.repository) }}
           PREFIX: ${{ needs.prepare.outputs.nightly_prefix }}/android
+          APK_VARIANT: ${{ steps.apk_build.outputs.variant }}
         run: |
           mkdir -p manifest-fragments
           BASE="${PUBLIC_BASE%/}"
           SIZE=$(stat -c %s "staging/${APK_NAME}")
-          jq -n --arg label "Android (Capacitor)" --arg url "${BASE}/${PREFIX}/${APK_NAME}" --argjson size "$SIZE" \
+          if [ "$APK_VARIANT" = "release" ]; then LABEL="Android (Capacitor)"; else LABEL="Android (Capacitor debug)"; fi
+          if [[ "$BASE" == *"github.com/"* ]]; then URL="${BASE}/${APK_NAME}"; else URL="${BASE}/${PREFIX}/${APK_NAME}"; fi
+          jq -n --arg label "$LABEL" --arg url "$URL" --argjson size "$SIZE" \
             '{label: $label, url: $url, size: $size}' > manifest-fragments/android.json
 
       - name: Upload manifest fragment
@@ -441,7 +494,7 @@ jobs:
         uses: actions/setup-java@v5
         with:
           distribution: temurin
-          java-version: '21'
+          java-version: "21"
 
       # Default 'packages' input includes the legacy 'tools' package, which
       # Google removed from the SDK repository — sdkmanager fails to find it.
@@ -472,16 +525,18 @@ jobs:
       # Sign the nightly APK with the same RELEASE_KEYSTORE the Capacitor nightly uses,
       # via the keystore.properties the Tauri Gradle project reads.
       - name: Configure signing
+        id: signing
         env:
           RELEASE_KEYSTORE_BASE64: ${{ secrets.RELEASE_KEYSTORE }}
           RELEASE_KEYSTORE_PASSWORD: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
           RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
           RELEASE_KEY_ALIAS_PASSWORD: ${{ secrets.RELEASE_KEY_ALIAS_PASSWORD }}
         run: |
-          : "${RELEASE_KEYSTORE_BASE64:?Set the RELEASE_KEYSTORE secret (base64 keystore)}"
-          : "${RELEASE_KEYSTORE_PASSWORD:?Set the RELEASE_KEYSTORE_PASSWORD secret}"
-          : "${RELEASE_KEY_ALIAS:?Set the RELEASE_KEY_ALIAS secret}"
-          : "${RELEASE_KEY_ALIAS_PASSWORD:?Set the RELEASE_KEY_ALIAS_PASSWORD secret}"
+          if [ -z "$RELEASE_KEYSTORE_BASE64" ] || [ -z "$RELEASE_KEYSTORE_PASSWORD" ] || [ -z "$RELEASE_KEY_ALIAS" ] || [ -z "$RELEASE_KEY_ALIAS_PASSWORD" ]; then
+            echo "::notice::Android signing secrets are incomplete; publishing a debug APK."
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
           KS="$RUNNER_TEMP/zimrobotics-release.jks"
           echo "$RELEASE_KEYSTORE_BASE64" | base64 --decode > "$KS"
           {
@@ -490,9 +545,15 @@ jobs:
             printf 'keyAlias=%s\n' "$RELEASE_KEY_ALIAS"
             printf 'keyPassword=%s\n' "$RELEASE_KEY_ALIAS_PASSWORD"
           } > src-tauri/gen/android/keystore.properties
+          echo "enabled=true" >> "$GITHUB_OUTPUT"
 
-      - name: Build signed APK
-        run: npx --no tauri android build --apk
+      - name: Build APK
+        run: |
+          if [ "${{ steps.signing.outputs.enabled }}" = "true" ]; then
+            npx --no tauri android build --apk --ci
+          else
+            npx --no tauri android build --apk --debug --ci
+          fi
 
       - name: Stage APK
         env:
@@ -501,19 +562,26 @@ jobs:
         run: |
           mkdir -p staging
           SHA_SHORT=$(echo "$COMMIT_SHA" | head -c 8)
-          APK_NAME="zimrobotics-${VERSION}-${SHA_SHORT}-tauri.apk"
-          APK=$(find src-tauri/gen/android/app/build/outputs/apk -name '*.apk' -path '*release*' | grep -iv unsigned | grep -i universal | head -1)
+          if [ "${{ steps.signing.outputs.enabled }}" = "true" ]; then VARIANT=release; else VARIANT=debug; fi
+          APK_NAME="zimrobotics-${VERSION}-${SHA_SHORT}-tauri-${VARIANT}.apk"
+          APK=$(find src-tauri/gen/android/app/build/outputs/apk -name '*.apk' -path "*${VARIANT}*" | grep -iv unsigned | grep -i universal | head -1 || true)
+          if [ -z "$APK" ]; then APK=$(find src-tauri/gen/android/app/build/outputs/apk -name '*.apk' -path "*${VARIANT}*" | grep -iv unsigned | head -1 || true); fi
           if [ -z "$APK" ]; then
-            APK=$(find src-tauri/gen/android/app/build/outputs/apk -name '*.apk' -path '*release*' | grep -iv unsigned | head -1)
-          fi
-          if [ -z "$APK" ]; then
-            echo "No signed release APK produced" >&2
+            echo "No ${VARIANT} APK produced" >&2
             exit 1
           fi
           cp "$APK" "staging/${APK_NAME}"
           echo "APK_NAME=${APK_NAME}" >> "$GITHUB_ENV"
 
+      - name: Upload Tauri APK
+        uses: actions/upload-artifact@v6
+        with:
+          name: bundles-android-tauri
+          path: staging/*
+          if-no-files-found: error
+
       - name: Sync APK to R2
+        if: needs.prepare.outputs.r2_enabled == 'true'
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
@@ -526,13 +594,16 @@ jobs:
 
       - name: Emit manifest fragment
         env:
-          PUBLIC_BASE: ${{ vars.CLOUDFLARE_R2_PUBLIC_BASE_URL }}
+          PUBLIC_BASE: ${{ needs.prepare.outputs.r2_enabled == 'true' && vars.CLOUDFLARE_R2_PUBLIC_BASE_URL || format('https://github.com/{0}/releases/download/nightly', github.repository) }}
           PREFIX: ${{ needs.prepare.outputs.nightly_prefix }}/tauri-android
+          SIGNING_ENABLED: ${{ steps.signing.outputs.enabled }}
         run: |
           mkdir -p manifest-fragments
           BASE="${PUBLIC_BASE%/}"
           SIZE=$(stat -c %s "staging/${APK_NAME}")
-          jq -n --arg label "Android (Tauri)" --arg url "${BASE}/${PREFIX}/${APK_NAME}" --argjson size "$SIZE" \
+          if [ "$SIGNING_ENABLED" = "true" ]; then LABEL="Android (Tauri)"; else LABEL="Android (Tauri debug)"; fi
+          if [[ "$BASE" == *"github.com/"* ]]; then URL="${BASE}/${APK_NAME}"; else URL="${BASE}/${PREFIX}/${APK_NAME}"; fi
+          jq -n --arg label "$LABEL" --arg url "$URL" --argjson size "$SIZE" \
             '{label: $label, url: $url, size: $size}' > manifest-fragments/tauri-android.json
 
       - name: Upload manifest fragment
@@ -565,7 +636,7 @@ jobs:
     needs: [prepare, desktop, android, tauri_android]
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       deployments: write
     environment:
       name: nightly-downloads
@@ -583,6 +654,13 @@ jobs:
         with:
           path: manifest-fragments
           pattern: manifest-*
+          merge-multiple: true
+
+      - name: Download nightly bundles
+        uses: actions/download-artifact@v7
+        with:
+          path: release-assets
+          pattern: bundles-*
           merge-multiple: true
 
       - name: Build manifest
@@ -627,6 +705,26 @@ jobs:
           NODE
           cat manifest.json
 
+      - name: Publish GitHub nightly prerelease
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NIGHTLY_DATE: ${{ needs.prepare.outputs.nightly_date }}
+          COMMIT_SHA: ${{ needs.prepare.outputs.commit_sha }}
+        run: |
+          TITLE="ZimRobotics Nightly ${NIGHTLY_DATE}"
+          NOTES="Automated ZimRobotics nightly build for ${NIGHTLY_DATE} from ${COMMIT_SHA}. Debug-labelled Android APKs are development builds produced because release-signing credentials were unavailable."
+          if gh release view nightly --repo "${{ github.repository }}" > /dev/null 2>&1; then
+            gh api --method PATCH "repos/${{ github.repository }}/git/refs/tags/nightly" -f sha="$COMMIT_SHA" -F force=true > /dev/null
+            gh release edit nightly --repo "${{ github.repository }}" --title "$TITLE" --notes "$NOTES" --prerelease
+            gh release view nightly --repo "${{ github.repository }}" --json assets --jq '.assets[].name' | while IFS= read -r asset; do
+              [ -z "$asset" ] || gh release delete-asset nightly "$asset" --repo "${{ github.repository }}" --yes
+            done
+          else
+            gh release create nightly --repo "${{ github.repository }}" --target "$COMMIT_SHA" --title "$TITLE" --notes "$NOTES" --prerelease
+          fi
+          gh release upload nightly release-assets/* --repo "${{ github.repository }}" --clobber
+
       - name: Fetch GitHub releases
         shell: bash
         env:
@@ -650,7 +748,15 @@ jobs:
           fi
           node scripts/generate-downloads-index.mjs "${ARGS[@]}"
 
+      - name: Upload downloads index
+        uses: actions/upload-artifact@v6
+        with:
+          name: zimrobotics-downloads-index
+          path: dist-downloads
+          if-no-files-found: error
+
       - name: Deploy to Cloudflare Pages
+        if: needs.prepare.outputs.pages_enabled == 'true'
         uses: cloudflare/wrangler-action@ebbaa1584979971c8614a24965b4405ff95890e0 # v4.0.0
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
